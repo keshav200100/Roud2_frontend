@@ -1,0 +1,50 @@
+constructor(props)
+  {
+    super(props)
+    this.state={
+        expression:"",
+        result:0
+    }
+  }
+  evaluate(expr)
+   {
+      let result=0;
+
+      return result;
+    
+   }
+   isAlphaNumeric(expr)
+   {
+      for(let i=0;i<expr.length;i++)
+      {
+        if(expr[i]<48||expr[i]>=58) return false;
+      }
+      return true;
+   }
+  handleValues(id)
+  {
+   if(id=='=')
+   {
+    let res=evalutate(this.state.expression)
+    this.setState({
+        expression:"",
+        result:res
+    }) 
+   }
+   else if(id=='Clear')
+   {
+      this.setState({
+        expression:"",
+        result:0
+      })
+   }
+   else if(id=='+/-')
+   {
+    if(this.isAlphaNumeric(this.state.expression))
+    {
+
+    }
+   }
+
+
+  }
