@@ -1,6 +1,13 @@
-# Simple Two Argument Calcualtor
-Use for algebric operation to calcualte the result of two arguments.
-It has a Login and Signup page use for security Purpose.
+# Round 2 FrontEnd  ( Making ini React Js and Backend as nodejs express and mongodb) 
+ Before runing this project run Round_2Backend. After that go to cd Round2_frontend and run following copmmand to run 
+ 
+ 1. npm install
+ 2. npm start 
+
+*****  Note create env file before run and add your mongodb url *****
+
+
+
 
 # Getting Started with Create React App
 
