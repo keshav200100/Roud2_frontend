@@ -1,121 +1,77 @@
-import React, { Component } from 'react'
-import Board from './Board'
+import { React, useState } from 'react'
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+import './style.css'
+import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
-export default class Calculator extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            arg1: "",
-            result: 0,
-            op: ""
-        }
-    }
-    evaluate(arg1, arg2, op) {
-        let result = 0;
-        if (op === '+') return arg1 + arg2
-        else if (op === '-') return arg1 - arg2
-        else if (op === '*') return arg1 * arg2
-        else if (op === '/') return arg1 / arg2
-        else if (op === '%') return arg1 % arg2
-        return result;
+export default function Login(props) {
+    const url = "https://calculator-9yds.onrender.com/contact"
+    let history = useNavigate();
+    const [status, setStatus] = useState("");
 
+    const [data, setData] = useState({
+        email: "",
+        password: ""
+    })
+
+    function handle(e) {
+        let newData ={...data}
+        newData[e.target.id] = e.target.value;
+        setData(newData)
     }
-    isNumeric(id) {
-        if (id[0] === '.') return true;
-        // let t= id[0].charCodeAt(0)>=48;
-        // console.log(t+ " after compare");
-        if (id[0].charCodeAt(0) >= 48 && id[0].charCodeAt(0) < 58) return true;
-        return false;
+
+    function submit(e) {
+        // history('/calculator')
+        e.preventDefault();
+        axios.post(url, {
+            email: data.email,
+            password: data.password,
+            phone_no: data.phoneno
+        }).then(res => {
+            if(res.data){
+                setStatus("")
+            history('/')
+            }
+            else{
+                setStatus("Email or Password is Wrong!")
+            }
+
+        })
     }
-    isOperator(id)
-    {
-        if (id === '+'|| id==='-'||id==='/'||id==='*'||id==='%') return true;
-        return false;
+    const mystyle={
+        backgroundColor:props.backgroundColor,
+        color:props.color,
+        borderColor:props.color
         
     }
-     toNumberString(num) { 
-        if (Number.isInteger(num)) { 
-          return num + ".0"
-        } else {
-          return num.toString(); 
-        }
-      }
+    return (
+        <div  className="container" > 
+          
+         <Form className ="design" style={mystyle} onSubmit={submit}>
+            <h2 style={{marginTop:"40px"}}>Contact Us Form</h2>
+            <div   style={{fontWeight:"bold",marginBottom:"20px", marginTop:"20px",color:"rgb(60, 60, 232)", fontSize:"30px"}}>{status}</div>
+            <Form.Group className="mb-3"  >
+                <Form.Label>Email address</Form.Label>
+                <Form.Control style={{width:"300px", borderRadius:"10px",border:"4px solid black"}} onChange={(e) => handle(e)} id="email" value={data.email} type="text" placeholder="Enter Name" />
+            </Form.Group>
 
-    handleValues(id) {
-        // console.log(id+" "+this.state.arg1+" "+this.state.result+" "+this.state.op)
-        if (this.state.arg1==="Invalid Expression") {
-            this.setState({
-                arg1:"",
-                op:"",
-                result:0
-            })
-            return;
-        }
-        else if (id === '=') {
-            if (this.state.arg1 === "") {
-                this.setState({
-                    arg1: "Invalid Expression"
-                })
-            }
-            if (this.state.op==="") {
-                let res = parseFloat(this.state.arg1);
-                this.setState({
-                    result: res
-                })
-            }
-            else {
-                let res = parseFloat(this.state.arg1);
-                res = this.evaluate(this.state.result, res, this.state.op)
-                let arg = this.toNumberString(res)
-                // console.log("Evalueated: "+res+"  "+arg)
-                this.setState({
-                    arg1: arg,
-                    op: "",
-                    result: res
-                })
-            }
-        }
-        else if (id === 'AC') {
-            this.setState({
-                arg1: "",
-                result: 0,
-                op: ""
-            })
-        }
-        else if (id === '+/-') {
-            let arg = "-" + this.state.arg1;
-            this.setState({
-                arg1: arg
-            })
-        }
-        else if (this.isNumeric(id)) {
-            this.setState({
-                arg1: this.state.arg1 + id
-            })
-        }
-        else if(this.isOperator(id)){
-            if (this.state.op.length >= 1) {
-                this.setState({
-                    arg1: "Invalid Expression"
-                })
-            }
-            // this.state.op=id;
-            let res = parseFloat(this.state.arg1)
-            this.setState({
-                arg1: "",
-                result: res,
-                op: id
-            })
+            <Form.Group className="mb-3"  >
+                <Form.Label>Address</Form.Label>
+                <Form.Control style={{width:"300px", borderRadius:"10px",border:"4px solid black"}} onChange={(e) => handle(e)} id="password" value={data.password} type="text" placeholder="Enter Address" />
+            </Form.Group>
 
-        }
- 
+            <Form.Group className="mb-3"  >
+                <Form.Label>Phone_No</Form.Label>
+                <Form.Control style={{width:"300px", borderRadius:"10px",border:"4px solid black"}} onChange={(e) => handle(e)} id="phoneno" value={data.phoneno} type="text" placeholder="Enter Phone No" />
+            </Form.Group>
 
-    }
-    render() {
-        return (
-            <div> Successfull Task!</div>
-            // <Board color={this.props.color} value={this.state.arg1} heading={this.props.heading} onClick={(id) => {this.handleValues(id)}} />
-        )
-    }
+            
+            <Button style={{backgroundColor:"rgb(7, 7, 7)", fontWeight:"bold", borderRadius:"10px"}} type="submit">
+                Submit
+            </Button>
+        </Form>
+        </div>
+    )
 }
+
